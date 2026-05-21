@@ -192,15 +192,20 @@ if not defined JAVAC_EXE (
 if not exist "build\classes" mkdir "build\classes"
 if not exist "dist\lib" mkdir "dist\lib"
 
-:: Copy library MySQL Connector ke folder dist/lib
+:: Copy library MySQL Connector dan JCalendar ke folder dist/lib
 if exist "lib\mysql-connector-java-8.0.28.jar" (
     copy /y "lib\mysql-connector-java-8.0.28.jar" "dist\lib\" >nul
 ) else (
     echo [PERINGATAN] lib\mysql-connector-java-8.0.28.jar tidak ditemukan!
 )
+if exist "lib\jcalendar-1.4.jar" (
+    copy /y "lib\jcalendar-1.4.jar" "dist\lib\" >nul
+) else (
+    echo [PERINGATAN] lib\jcalendar-1.4.jar tidak ditemukan!
+)
 
 echo 1. Mengompilasi source code (.java) ke build/classes...
-"%JAVAC_EXE%" -d build\classes -cp "lib\mysql-connector-java-8.0.28.jar" src\penggajian\*.java
+"%JAVAC_EXE%" -d build\classes -cp "lib\mysql-connector-java-8.0.28.jar;lib\jcalendar-1.4.jar" src\penggajian\*.java
 if %errorlevel% neq 0 (
     echo.
     echo [ERROR] Kompilasi gagal! Silakan periksa kembali kode program Anda.
@@ -210,7 +215,7 @@ if %errorlevel% neq 0 (
 
 echo 2. Membuat file MANIFEST.MF...
 echo Manifest-Version: 1.0 > manifest.tmp
-echo Class-Path: lib/mysql-connector-java-8.0.28.jar >> manifest.tmp
+echo Class-Path: lib/mysql-connector-java-8.0.28.jar lib/jcalendar-1.4.jar >> manifest.tmp
 echo Main-Class: penggajian.Main >> manifest.tmp
 echo. >> manifest.tmp
 

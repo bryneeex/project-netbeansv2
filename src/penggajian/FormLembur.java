@@ -3,15 +3,14 @@ package penggajian;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-// import com.toedter.calendar.JDateChooser;
+import com.toedter.calendar.JDateChooser;
 
 public class FormLembur extends JFrame {
     private JTextField txtIdLembur, txtJumlah;
     private JComboBox<String> cbIdKaryawan;
     private JTable table;
     private DefaultTableModel tableModel;
-    private JTextField txtTanggalLemburPlaceholder; 
-    // private JDateChooser dateLembur;
+    private JDateChooser dateLembur;
 
     public FormLembur() {
         setTitle("Data Lembur");
@@ -35,9 +34,9 @@ public class FormLembur extends JFrame {
         pnlForm.add(cbIdKaryawan);
         
         pnlForm.add(createLabel("Tanggal Lembur:"));
-        txtTanggalLemburPlaceholder = new JTextField("YYYY-MM-DD");
-        pnlForm.add(txtTanggalLemburPlaceholder);
-        // dateLembur = new JDateChooser(); pnlForm.add(dateLembur);
+        dateLembur = new JDateChooser();
+        dateLembur.setDateFormatString("dd-MM-yyyy");
+        pnlForm.add(dateLembur);
         
         pnlForm.add(createLabel("Jumlah Jam:"));
         txtJumlah = new JTextField(); pnlForm.add(txtJumlah);
@@ -122,7 +121,12 @@ public class FormLembur extends JFrame {
         if(row >= 0) {
             txtIdLembur.setText(tableModel.getValueAt(row, 0).toString());
             cbIdKaryawan.setSelectedItem(tableModel.getValueAt(row, 1).toString());
-            txtTanggalLemburPlaceholder.setText(tableModel.getValueAt(row, 2).toString());
+            try {
+                java.util.Date date = new java.text.SimpleDateFormat("dd-MM-yyyy").parse(tableModel.getValueAt(row, 2).toString());
+                dateLembur.setDate(date);
+            } catch (Exception ignored) {
+                dateLembur.setDate(null);
+            }
             txtJumlah.setText(tableModel.getValueAt(row, 3).toString());
         }
     }
@@ -130,7 +134,7 @@ public class FormLembur extends JFrame {
     private void resetForm() {
         txtIdLembur.setText("");
         if(cbIdKaryawan.getItemCount() > 0) cbIdKaryawan.setSelectedIndex(0);
-        txtTanggalLemburPlaceholder.setText("YYYY-MM-DD");
+        dateLembur.setDate(null);
         txtJumlah.setText("");
     }
     
@@ -146,19 +150,13 @@ public class FormLembur extends JFrame {
                 return;
             }
             String idKaryawan = cbIdKaryawan.getSelectedItem().toString();
-            String tglInput = txtTanggalLemburPlaceholder.getText();
-            int jam = Integer.parseInt(txtJumlah.getText());
-            
-            // Konversi format tanggal
-            String tglMySQL = tglInput;
-            try {
-                java.text.SimpleDateFormat formatInput = new java.text.SimpleDateFormat("dd-MM-yyyy");
-                java.text.SimpleDateFormat formatDB = new java.text.SimpleDateFormat("yyyy-MM-dd");
-                tglMySQL = formatDB.format(formatInput.parse(tglInput));
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Format tanggal salah! Gunakan format DD-MM-YYYY", "Error Tanggal", JOptionPane.ERROR_MESSAGE);
+            java.util.Date selectedDate = dateLembur.getDate();
+            if (selectedDate == null) {
+                JOptionPane.showMessageDialog(this, "Harap pilih Tanggal Lembur terlebih dahulu!", "Error Tanggal", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            String tglMySQL = new java.text.SimpleDateFormat("yyyy-MM-dd").format(selectedDate);
+            int jam = Integer.parseInt(txtJumlah.getText());
             
             String sql = "INSERT INTO tb_lembur VALUES (?, ?, ?, ?)";
             if (DatabaseHelper.executeUpdate(sql, id, idKaryawan, tglMySQL, jam)) {
@@ -179,16 +177,13 @@ public class FormLembur extends JFrame {
                 return;
             }
             String idKaryawan = cbIdKaryawan.getSelectedItem().toString();
-            String tglInput = txtTanggalLemburPlaceholder.getText();
-            int jam = Integer.parseInt(txtJumlah.getText());
-            
-            String tglMySQL = tglInput;
-            try {
-                tglMySQL = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.text.SimpleDateFormat("dd-MM-yyyy").parse(tglInput));
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Format tanggal salah! Gunakan DD-MM-YYYY", "Error", JOptionPane.ERROR_MESSAGE);
+            java.util.Date selectedDate = dateLembur.getDate();
+            if (selectedDate == null) {
+                JOptionPane.showMessageDialog(this, "Harap pilih Tanggal Lembur terlebih dahulu!", "Error Tanggal", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            String tglMySQL = new java.text.SimpleDateFormat("yyyy-MM-dd").format(selectedDate);
+            int jam = Integer.parseInt(txtJumlah.getText());
             
             String sql = "UPDATE tb_lembur SET id_karyawan=?, tanggal_lembur=?, jumlah_jam=? WHERE id_lembur=?";
             if (DatabaseHelper.executeUpdate(sql, idKaryawan, tglMySQL, jam, id)) {

@@ -3,8 +3,7 @@ package penggajian;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-// Uncomment the line below once jcalendar.jar is added to the project libraries!
-// import com.toedter.calendar.JDateChooser;
+import com.toedter.calendar.JDateChooser;
 
 public class FormKaryawan extends JFrame {
     private JTextField txtIdKaryawan, txtNama, txtTempat;
@@ -13,10 +12,7 @@ public class FormKaryawan extends JFrame {
     private JTextArea txtAlamat;
     private JTable table;
     private DefaultTableModel tableModel;
-    
-    // Use JTextField as placeholder until JCalendar is imported
-    private JTextField txtTanggalLahirPlaceholder; 
-    // private JDateChooser dateLahir;
+    private JDateChooser dateLahir;
 
     public FormKaryawan() {
         setTitle("Data Karyawan");
@@ -55,9 +51,9 @@ public class FormKaryawan extends JFrame {
         txtTempat = new JTextField(); pnlForm.add(txtTempat);
         
         pnlForm.add(createLabel("Tanggal Lahir:"));
-        txtTanggalLahirPlaceholder = new JTextField("YYYY-MM-DD");
-        pnlForm.add(txtTanggalLahirPlaceholder); 
-        // dateLahir = new JDateChooser(); pnlForm.add(dateLahir);
+        dateLahir = new JDateChooser();
+        dateLahir.setDateFormatString("dd-MM-yyyy");
+        pnlForm.add(dateLahir);
         
         pnlForm.add(createLabel("Status:"));
         JPanel pnlStatus = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -151,7 +147,12 @@ public class FormKaryawan extends JFrame {
             else { rbLaki.setSelected(false); rbPerempuan.setSelected(false); }
             
             txtTempat.setText(tableModel.getValueAt(row, 4).toString());
-            txtTanggalLahirPlaceholder.setText(tableModel.getValueAt(row, 5).toString());
+            try {
+                java.util.Date date = new java.text.SimpleDateFormat("dd-MM-yyyy").parse(tableModel.getValueAt(row, 5).toString());
+                dateLahir.setDate(date);
+            } catch (Exception ignored) {
+                dateLahir.setDate(null);
+            }
             
             String stat = tableModel.getValueAt(row, 6).toString().toLowerCase();
             if(stat.contains("menikah") && !stat.contains("belum")) rbMenikah.setSelected(true);
@@ -168,7 +169,7 @@ public class FormKaryawan extends JFrame {
         cbIdGolongan.setSelectedIndex(0);
         rbLaki.setSelected(false); rbPerempuan.setSelected(false);
         txtTempat.setText("");
-        txtTanggalLahirPlaceholder.setText("YYYY-MM-DD");
+        dateLahir.setDate(null);
         rbMenikah.setSelected(false); rbBelum.setSelected(false);
         txtAlamat.setText("");
     }
@@ -179,7 +180,7 @@ public class FormKaryawan extends JFrame {
         String idGol = cbIdGolongan.getSelectedItem().toString();
         String jk = rbLaki.isSelected() ? "Laki-laki" : (rbPerempuan.isSelected() ? "Perempuan" : "");
         String tempat = txtTempat.getText();
-        String tglInput = txtTanggalLahirPlaceholder.getText(); // Input dari user (DD-MM-YYYY)
+        java.util.Date selectedDate = dateLahir.getDate();
         String status = rbMenikah.isSelected() ? "Menikah" : (rbBelum.isSelected() ? "Belum Menikah" : "");
         String alamat = txtAlamat.getText();
 
@@ -188,17 +189,11 @@ public class FormKaryawan extends JFrame {
             return;
         }
 
-        // Konversi DD-MM-YYYY menjadi YYYY-MM-DD untuk MySQL
-        String tglMySQL = tglInput;
-        try {
-            java.text.SimpleDateFormat formatInput = new java.text.SimpleDateFormat("dd-MM-yyyy");
-            java.text.SimpleDateFormat formatDB = new java.text.SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date date = formatInput.parse(tglInput);
-            tglMySQL = formatDB.format(date);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Format tanggal salah! Gunakan format DD-MM-YYYY (Contoh: 17-03-2009)", "Error Tanggal", JOptionPane.ERROR_MESSAGE);
+        if (selectedDate == null) {
+            JOptionPane.showMessageDialog(this, "Harap pilih Tanggal Lahir terlebih dahulu!", "Error Tanggal", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        String tglMySQL = new java.text.SimpleDateFormat("yyyy-MM-dd").format(selectedDate);
 
         String sql = "INSERT INTO tb_karyawan (id_karyawan, nama, id_golongan, jenis_kelamin, tempat_lahir, tanggal_lahir, status, alamat) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         if (DatabaseHelper.executeUpdate(sql, id, nama, idGol, jk, tempat, tglMySQL, status, alamat)) {
@@ -214,7 +209,7 @@ public class FormKaryawan extends JFrame {
         String idGol = cbIdGolongan.getSelectedItem().toString();
         String jk = rbLaki.isSelected() ? "Laki-laki" : (rbPerempuan.isSelected() ? "Perempuan" : "");
         String tempat = txtTempat.getText();
-        String tglInput = txtTanggalLahirPlaceholder.getText();
+        java.util.Date selectedDate = dateLahir.getDate();
         String status = rbMenikah.isSelected() ? "Menikah" : (rbBelum.isSelected() ? "Belum Menikah" : "");
         String alamat = txtAlamat.getText();
 
@@ -223,14 +218,11 @@ public class FormKaryawan extends JFrame {
             return;
         }
 
-        String tglMySQL = tglInput;
-        try {
-            java.util.Date date = new java.text.SimpleDateFormat("dd-MM-yyyy").parse(tglInput);
-            tglMySQL = new java.text.SimpleDateFormat("yyyy-MM-dd").format(date);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Format tanggal salah! Gunakan DD-MM-YYYY", "Error", JOptionPane.ERROR_MESSAGE);
+        if (selectedDate == null) {
+            JOptionPane.showMessageDialog(this, "Harap pilih Tanggal Lahir terlebih dahulu!", "Error Tanggal", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        String tglMySQL = new java.text.SimpleDateFormat("yyyy-MM-dd").format(selectedDate);
 
         String sql = "UPDATE tb_karyawan SET nama=?, id_golongan=?, jenis_kelamin=?, tempat_lahir=?, tanggal_lahir=?, status=?, alamat=? WHERE id_karyawan=?";
         if (DatabaseHelper.executeUpdate(sql, nama, idGol, jk, tempat, tglMySQL, status, alamat, id)) {

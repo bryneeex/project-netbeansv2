@@ -3,6 +3,7 @@ package penggajian;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import com.toedter.calendar.JDateChooser;
 
 public class FormPenggajian extends JFrame {
     private JTextField txtIdGaji, txtNamaKaryawan, txtGolongan;
@@ -10,9 +11,7 @@ public class FormPenggajian extends JFrame {
     private JComboBox<String> cbIdKaryawan;
     private JTable table;
     private DefaultTableModel tableModel;
-    
-    private JTextField txtTanggalGajiPlaceholder;
-    // private JDateChooser dateGaji;
+    private JDateChooser dateGaji;
     private boolean isUpdating = false;
 
     public FormPenggajian() {
@@ -33,8 +32,9 @@ public class FormPenggajian extends JFrame {
         txtIdGaji = new JTextField(); pnlForm.add(txtIdGaji);
         
         pnlForm.add(createLabel("Tanggal Gaji:"));
-        txtTanggalGajiPlaceholder = new JTextField("YYYY-MM-DD"); pnlForm.add(txtTanggalGajiPlaceholder);
-        // dateGaji = new JDateChooser(); pnlForm.add(dateGaji);
+        dateGaji = new JDateChooser();
+        dateGaji.setDateFormatString("dd-MM-yyyy");
+        pnlForm.add(dateGaji);
         
         pnlForm.add(createLabel("ID Karyawan:"));
         cbIdKaryawan = new JComboBox<>(new String[]{"K001", "K002"}); pnlForm.add(cbIdKaryawan);
@@ -188,7 +188,12 @@ public class FormPenggajian extends JFrame {
         int row = table.getSelectedRow();
         if(row >= 0) {
             txtIdGaji.setText(tableModel.getValueAt(row, 0).toString());
-            txtTanggalGajiPlaceholder.setText(tableModel.getValueAt(row, 1).toString());
+            try {
+                java.util.Date date = new java.text.SimpleDateFormat("dd-MM-yyyy").parse(tableModel.getValueAt(row, 1).toString());
+                dateGaji.setDate(date);
+            } catch (Exception ignored) {
+                dateGaji.setDate(null);
+            }
             
             isUpdating = true;
             cbIdKaryawan.setSelectedItem(tableModel.getValueAt(row, 2).toString());
@@ -205,7 +210,7 @@ public class FormPenggajian extends JFrame {
     
     private void resetForm() {
         txtIdGaji.setText("");
-        txtTanggalGajiPlaceholder.setText("YYYY-MM-DD");
+        dateGaji.setDate(null);
         isUpdating = true;
         if(cbIdKaryawan.getItemCount() > 0) cbIdKaryawan.setSelectedIndex(0);
         isUpdating = false;
@@ -228,7 +233,12 @@ public class FormPenggajian extends JFrame {
                 JOptionPane.showMessageDialog(this, "Data Karyawan kosong!");
                 return;
             }
-            String tglInput = txtTanggalGajiPlaceholder.getText();
+            java.util.Date selectedDate = dateGaji.getDate();
+            if (selectedDate == null) {
+                JOptionPane.showMessageDialog(this, "Harap pilih Tanggal Gaji terlebih dahulu!", "Error Tanggal", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            String tglMySQL = new java.text.SimpleDateFormat("yyyy-MM-dd").format(selectedDate);
             String idKaryawan = cbIdKaryawan.getSelectedItem().toString();
             String nama = txtNamaKaryawan.getText();
             String golongan = txtGolongan.getText();
@@ -236,17 +246,6 @@ public class FormPenggajian extends JFrame {
             // Hitung dulu jika belum dihitung
             if (txtTotalGaji.getText().isEmpty()) {
                 hitungGaji();
-            }
-            
-            // Konversi format tanggal
-            String tglMySQL = tglInput;
-            try {
-                java.text.SimpleDateFormat formatInput = new java.text.SimpleDateFormat("dd-MM-yyyy");
-                java.text.SimpleDateFormat formatDB = new java.text.SimpleDateFormat("yyyy-MM-dd");
-                tglMySQL = formatDB.format(formatInput.parse(tglInput));
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Format tanggal salah! Gunakan format DD-MM-YYYY", "Error Tanggal", JOptionPane.ERROR_MESSAGE);
-                return;
             }
             
             double gapok = Double.parseDouble(txtJumlahGaji.getText().isEmpty() ? "0" : txtJumlahGaji.getText());
@@ -272,20 +271,17 @@ public class FormPenggajian extends JFrame {
                 JOptionPane.showMessageDialog(this, "Harap pilih data dari tabel terlebih dahulu!");
                 return;
             }
-            String tglInput = txtTanggalGajiPlaceholder.getText();
+            java.util.Date selectedDate = dateGaji.getDate();
+            if (selectedDate == null) {
+                JOptionPane.showMessageDialog(this, "Harap pilih Tanggal Gaji terlebih dahulu!", "Error Tanggal", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            String tglMySQL = new java.text.SimpleDateFormat("yyyy-MM-dd").format(selectedDate);
             String idKaryawan = cbIdKaryawan.getSelectedItem().toString();
             String nama = txtNamaKaryawan.getText();
             String golongan = txtGolongan.getText();
             
             if (txtTotalGaji.getText().isEmpty()) hitungGaji();
-            
-            String tglMySQL = tglInput;
-            try {
-                tglMySQL = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.text.SimpleDateFormat("dd-MM-yyyy").parse(tglInput));
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Format tanggal salah! Gunakan DD-MM-YYYY", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
             
             double gapok = Double.parseDouble(txtJumlahGaji.getText().isEmpty() ? "0" : txtJumlahGaji.getText());
             double lembur = Double.parseDouble(txtJumlahLembur.getText().isEmpty() ? "0" : txtJumlahLembur.getText());

@@ -6,7 +6,7 @@ public class DatabaseHelper {
 
     private static final String HOST = "localhost";
     private static final String PORT = "3306";
-    private static final String DB   = "db_penggajian";
+    private static final String DB   = "db_fardhan";
     private static final String USER = "root";
     private static final String PASS = "";
 

@@ -15,7 +15,7 @@ Karena file konfigurasi internal NetBeans (`nbproject`) berbeda-beda tiap komput
 
 1. **Buat Database:**
    * Buka phpMyAdmin / MySQL (XAMPP).
-   * Buat database baru bernama `db_penggajian`.
+   * Buat database baru bernama `db_fardhan`.
    * Import file `sql/penggajian.sql` ke dalam database tersebut.
 
 2. **Buat Project Baru di NetBeans:**

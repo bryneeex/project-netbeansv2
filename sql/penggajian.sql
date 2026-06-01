@@ -1,10 +1,10 @@
 -- ============================================
--- DATABASE: db_penggajian
+-- DATABASE: db_fardhan
 -- Aplikasi Penggajian Karyawan - NetBeans
 -- ============================================
 
-CREATE DATABASE IF NOT EXISTS db_penggajian;
-USE db_penggajian;
+CREATE DATABASE IF NOT EXISTS db_fardhan;
+USE db_fardhan;
 
 -- Tabel User (Login)
 CREATE TABLE IF NOT EXISTS tb_user (

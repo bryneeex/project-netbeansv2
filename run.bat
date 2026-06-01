@@ -274,7 +274,7 @@ echo Mengimpor sql\penggajian.sql ke MySQL...
 "!MYSQL_EXE!" -u root --force < "sql\penggajian.sql"
 if %errorlevel% equ 0 (
     echo.
-    echo [SUKSES] Database 'db_penggajian' berhasil diimpor!
+    echo [SUKSES] Database 'db_fardhan' berhasil diimpor!
     echo Username default login: admin
     echo Password default login: admin
 ) else (

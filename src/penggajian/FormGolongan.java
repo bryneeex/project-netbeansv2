@@ -147,6 +147,11 @@ public class FormGolongan extends JFrame {
             double transport = Double.parseDouble(txtTransport.getText());
             double makan = Double.parseDouble(txtUangMakan.getText());
             
+            if (anak == 0 && tjAnak > 0) {
+                JOptionPane.showMessageDialog(this, "Tunjangan anak harus 0 jika tidak memiliki anak!", "Error Validasi", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
             String sql = "INSERT INTO tb_golongan VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             if (DatabaseHelper.executeUpdate(sql, id, nama, gapok, tjIstri, anak, tjAnak, transport, makan)) {
                 JOptionPane.showMessageDialog(this, "Data Golongan berhasil disimpan!");
@@ -172,6 +177,11 @@ public class FormGolongan extends JFrame {
             double tjAnak = Double.parseDouble(txtTunjanganAnak.getText());
             double transport = Double.parseDouble(txtTransport.getText());
             double makan = Double.parseDouble(txtUangMakan.getText());
+            
+            if (anak == 0 && tjAnak > 0) {
+                JOptionPane.showMessageDialog(this, "Tunjangan anak harus 0 jika tidak memiliki anak!", "Error Validasi", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             
             String sql = "UPDATE tb_golongan SET nama_golongan=?, gaji_pokok=?, tunjangan_istri=?, jumlah_anak=?, tunjangan_anak=?, transport=?, uang_makan=? WHERE id_golongan=?";
             if (DatabaseHelper.executeUpdate(sql, nama, gapok, tjIstri, anak, tjAnak, transport, makan, id)) {

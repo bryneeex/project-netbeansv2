@@ -2,9 +2,7 @@ package penggajian;
 
 public class Main {
     public static void main(String[] args) {
-        // Gunakan tema Nimbus agar tampilan lebih modern
         try {
-            // Setup custom modern dark theme colors
             javax.swing.UIManager.put("control", new java.awt.Color(45, 45, 48));
             javax.swing.UIManager.put("info", new java.awt.Color(45, 45, 48));
             javax.swing.UIManager.put("nimbusBase", new java.awt.Color(18, 30, 49));
@@ -20,7 +18,6 @@ public class Main {
             javax.swing.UIManager.put("nimbusSelectionBackground", new java.awt.Color(50, 100, 150));
             javax.swing.UIManager.put("text", new java.awt.Color(230, 230, 230));
             
-            // Customizing Tables
             javax.swing.UIManager.put("Table.background", new java.awt.Color(35, 35, 40));
             javax.swing.UIManager.put("Table.alternateRowColor", new java.awt.Color(45, 45, 50));
             javax.swing.UIManager.put("Table.foreground", new java.awt.Color(230, 230, 230));

@@ -11,7 +11,6 @@ public class Dashboard extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         
-        // Background biru
         getContentPane().setBackground(new Color(20, 25, 35));
         setLayout(new BorderLayout());
         
@@ -37,7 +36,6 @@ public class Dashboard extends JFrame {
         
         add(pnlMenu, BorderLayout.CENTER);
         
-        // Event Listeners
         btnKaryawan.addActionListener(e -> new FormKaryawan().setVisible(true));
         btnGolongan.addActionListener(e -> new FormGolongan().setVisible(true));
         btnLembur.addActionListener(e -> new FormLembur().setVisible(true));

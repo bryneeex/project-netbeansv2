@@ -21,7 +21,6 @@ public class FormLembur extends JFrame {
         
         setLayout(new BorderLayout(10, 10));
         
-        // Panel Form
         JPanel pnlForm = new JPanel(new GridLayout(4, 2, 5, 5));
         pnlForm.setOpaque(false);
         pnlForm.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -41,7 +40,6 @@ public class FormLembur extends JFrame {
         pnlForm.add(createLabel("Jumlah Jam:"));
         txtJumlah = new JTextField(); pnlForm.add(txtJumlah);
         
-        // Panel Buttons
         JPanel pnlButtons = new JPanel();
         pnlButtons.setOpaque(false);
         JButton btnSave = new JButton("Save");
@@ -60,7 +58,6 @@ public class FormLembur extends JFrame {
         
         add(pnlTop, BorderLayout.NORTH);
         
-        // Panel Table
         String[] cols = {"ID Lembur", "ID Karyawan", "Tgl Lembur", "Jumlah Jam"};
         tableModel = new DefaultTableModel(cols, 0);
         table = new JTable(tableModel);

@@ -23,7 +23,6 @@ public class FormPenggajian extends JFrame {
         
         setLayout(new BorderLayout(10, 10));
         
-        // Panel Form
         JPanel pnlForm = new JPanel(new GridLayout(9, 2, 5, 5));
         pnlForm.setOpaque(false);
         pnlForm.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -57,7 +56,6 @@ public class FormPenggajian extends JFrame {
         pnlForm.add(createLabel("Total Gaji Bersih:"));
         txtTotalGaji = new JTextField(); txtTotalGaji.setEditable(false); pnlForm.add(txtTotalGaji);
         
-        // Panel Buttons
         JPanel pnlButtons = new JPanel();
         pnlButtons.setOpaque(false);
         JButton btnHitung = new JButton("Hitung Total");
@@ -78,7 +76,6 @@ public class FormPenggajian extends JFrame {
         
         add(pnlTop, BorderLayout.NORTH);
         
-        // Panel Table
         String[] cols = {"ID Gaji", "Tgl", "ID Kary", "Nama", "Golongan", "Gaji", "Lembur", "Potongan", "Total"};
         tableModel = new DefaultTableModel(cols, 0);
         table = new JTable(tableModel);
@@ -243,7 +240,6 @@ public class FormPenggajian extends JFrame {
             String nama = txtNamaKaryawan.getText();
             String golongan = txtGolongan.getText();
             
-            // Hitung dulu jika belum dihitung
             if (txtTotalGaji.getText().isEmpty()) {
                 hitungGaji();
             }

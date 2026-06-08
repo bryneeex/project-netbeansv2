@@ -23,7 +23,6 @@ public class FormKaryawan extends JFrame {
         
         setLayout(new BorderLayout(10, 10));
         
-        // Panel Form
         JPanel pnlForm = new JPanel(new GridLayout(8, 2, 5, 5));
         pnlForm.setOpaque(false);
         pnlForm.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -68,7 +67,6 @@ public class FormKaryawan extends JFrame {
         txtAlamat = new JTextArea(3, 20);
         pnlForm.add(new JScrollPane(txtAlamat));
         
-        // Panel Buttons
         JPanel pnlButtons = new JPanel();
         pnlButtons.setOpaque(false);
         JButton btnSave = new JButton("Save");
@@ -87,7 +85,6 @@ public class FormKaryawan extends JFrame {
         
         add(pnlTop, BorderLayout.NORTH);
         
-        // Panel Table
         String[] cols = {"ID", "Nama", "Golongan", "L/P", "Tempat", "Tgl Lahir", "Status", "Alamat"};
         tableModel = new DefaultTableModel(cols, 0);
         table = new JTable(tableModel);
@@ -115,7 +112,6 @@ public class FormKaryawan extends JFrame {
             while (rs != null && rs.next()) {
                 String tglMySQL = rs.getString("tanggal_lahir");
                 String tglDisplay = tglMySQL;
-                // Format YYYY-MM-DD kembali ke DD-MM-YYYY untuk display
                 try {
                     java.text.SimpleDateFormat formatDB = new java.text.SimpleDateFormat("yyyy-MM-dd");
                     java.text.SimpleDateFormat formatDisplay = new java.text.SimpleDateFormat("dd-MM-yyyy");

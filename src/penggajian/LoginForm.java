@@ -17,7 +17,6 @@ public class LoginForm extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         
-        // Background biru sesuai PRD
         getContentPane().setBackground(new Color(30, 35, 45));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -35,8 +34,6 @@ public class LoginForm extends JFrame {
         lblPass.setForeground(Color.WHITE);
         txtPassword = new JPasswordField(15);
         
-        // Sesuai PRD, tombol harus menggunakan image icon (di sini disiapkan tempatnya)
-        // btnLogin.setIcon(new ImageIcon("path/to/icon.png"));
         btnLogin = new JButton("Login");
         btnExit = new JButton("Exit");
         
@@ -61,7 +58,6 @@ public class LoginForm extends JFrame {
         gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
         add(panelBtn, gbc);
         
-        // Events
         btnLogin.addActionListener(this::prosesLogin);
         btnExit.addActionListener(e -> System.exit(0));
     }

@@ -12,7 +12,7 @@ public class Dashboard extends JFrame {
         setLocationRelativeTo(null);
         
         // Background biru
-        getContentPane().setBackground(new Color(41, 128, 185));
+        getContentPane().setBackground(new Color(20, 25, 35));
         setLayout(new BorderLayout());
         
         JLabel lblTitle = new JLabel("SISTEM INFORMASI PENGGAJIAN KARYAWAN", SwingConstants.CENTER);

@@ -18,7 +18,7 @@ public class LoginForm extends JFrame {
         setLocationRelativeTo(null);
         
         // Background biru sesuai PRD
-        getContentPane().setBackground(new Color(52, 152, 219));
+        getContentPane().setBackground(new Color(30, 35, 45));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);

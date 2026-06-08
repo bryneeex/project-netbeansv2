@@ -17,7 +17,7 @@ public class FormLembur extends JFrame {
         setSize(700, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(new Color(52, 152, 219));
+        getContentPane().setBackground(new Color(30, 35, 45));
         
         setLayout(new BorderLayout(10, 10));
         
